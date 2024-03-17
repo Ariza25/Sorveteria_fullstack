@@ -8,13 +8,6 @@ export type Rating = {
   rating: string;
   starValue: number;
 };
-
-export interface Comment {
-  id: string;
-  userId: string;
-  productId: string;
-  text: string;
-}
 export interface RatingProps {
   id: string;
   rating: Rating[];
@@ -27,6 +20,11 @@ export interface Size {
   name: string;
 }
 
+export interface Category{
+  id: string;
+  name: string;
+}
+
 export interface Product {
   id: string;
   name: string;
@@ -35,9 +33,9 @@ export interface Product {
   images: string[];
   categoryId: string;
   quantity: number;
-  sizes: Size;
+  size: Size;
   rating: Rating[];
-  comment: Comment[];
+  stock: boolean;
 }
 
 type ProductContextType = {

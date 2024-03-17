@@ -1,16 +1,14 @@
 import { ProductContext } from "../context/ProductContext";
 import { CartContext } from "../context/CartContext";
-import { useContext, useState} from "react";
-
-import { IoMdHeartEmpty } from "react-icons/io";
-
+import { useContext, useState } from "react";
+import { ToastContainer } from "react-toastify";
 import Quantity from "../components/Quantity";
-import Rating from "../components/Rating";
+import WhatsApp from "../components/WhatsApp";
 
 const ProductDetails = () => {
   const { selectedProduct } = useContext(ProductContext);
   const { addToCart } = useContext(CartContext);
-  
+
   const [isSelectImage, setIsSelectImage] = useState(0);
   const [isSelectedQuantity, setIsSelectedQuantity] = useState(1);
 
@@ -31,15 +29,17 @@ const ProductDetails = () => {
     }
   };
 
-    const handleAddToCart = () => {
-        addToCart({
-        ...selectedProduct,
-        selectedQuantity: isSelectedQuantity,
-        });
-    };
+  const handleAddToCart = () => {
+    addToCart({
+      ...selectedProduct,
+      selectedQuantity: isSelectedQuantity,
+    });
+  };
 
   return (
     <>
+      <ToastContainer />
+      <WhatsApp />
       <section className="flex justify-center border-t-2 ms-14 py-10 shadow-sm h-[80vh] w-[90%]">
         <div>
           {imageUrls.map((imageUrl, index) => (
@@ -71,12 +71,7 @@ const ProductDetails = () => {
             <div className="font-bold text-2xl text-red-700">
               {selectedProduct.name}
             </div>
-            <div className="ms-3 mt-1 cursor-pointer">
-              <IoMdHeartEmpty size={25} />
-            </div>
           </div>
-
-          <Rating />
 
           <div className="flex mt-4">
             <h3 className="font-bold text-md text-gray-800">Price:</h3>
@@ -86,10 +81,18 @@ const ProductDetails = () => {
               {selectedProduct.quantity} unities
             </div>
           </div>
+          <div className="flex mt-4">
+          <h3 className="font-bold text-md text-gray-800">Peso do Produto:</h3>
+          <div className="ms-1 text-md">{selectedProduct.size.name}</div>
+          </div>
 
           <div className="flex mt-4 items-center">
             <h3 className="font-bold text-md me-2">
-              <Quantity onQuantityChange={(quantity: number) => setIsSelectedQuantity(quantity)} />
+              <Quantity
+                onQuantityChange={(quantity: number) =>
+                  setIsSelectedQuantity(quantity)
+                }
+              />
             </h3>
           </div>
           <h3 className="font-bold mt-4 text-gray-800">Product Description</h3>
@@ -98,38 +101,17 @@ const ProductDetails = () => {
             <button className="p-2 rounded-lg bg-red-800 text-slate-50 hover:bg-red-700">
               Buy now
             </button>
-            <button className="p-2 rounded-lg bg-red-600 border hover:bg-red-500 text-slate-50"
-            onClick={handleAddToCart}>
+            <button
+              className="p-2 rounded-lg bg-red-600 border hover:bg-red-500 text-slate-50"
+              onClick={() => {
+                handleAddToCart();
+              }}
+            >
               Add to cart
             </button>
           </div>
         </div>
       </section>
-
-      <section className="flex flex-col h-[100%] shadow-md w-[90%] ms-14 mb-20">
-        <div className="flex flex-row w-[100%]">
-          <div className="bg-red-800">
-            <h2 className="ps-10 font-semibold flex w-[300px] text-2xl text-slate-50 mt-14">
-              Rating do Produto
-            </h2>
-            <div className="flex items-center mt-2 ms-10">
-              <div className="text-[50px] text-slate-50 me-4 mb-2">4.8</div>
-              <div>
-                <div className="flex text-white">
-                  <Rating />
-                </div>
-                <small>250 avaliações</small>
-              </div>
-            </div>
-            <div className="ms-10">
-              <p className="text-slate-50">Perfeito para % dos clientes</p>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      
     </>
   );
 };

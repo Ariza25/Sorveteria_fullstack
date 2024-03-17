@@ -17,7 +17,7 @@ const DropDownProducts = ({
     <>
       <button
         onClick={handleShowMenu}
-        className={`absolute left-[15.5%] top-[12%] z-10 bg-white divide-y rounded-lg shadow w-44 dark:bg-slate-600`}
+        className={`absolute z-10 top-16 bg-white divide-y rounded-lg shadow w-44 dark:bg-slate-600`}
       >
         <div>
         <ul

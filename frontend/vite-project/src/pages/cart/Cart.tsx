@@ -8,14 +8,22 @@ import ShoppingResume from "../../components/cart/ShoppingResume";
 import { IoMdClose } from "react-icons/io";
 import { FaCheck } from "react-icons/fa";
 
+import { ToastContainer } from "react-toastify";
+
 import emptyCartImage from "../../images/emptycart2.webp";
+import WhatsApp from "../../components/WhatsApp";
 
 const Cart = () => {
   const { cart, removeFromCart, updateQuantity } = useContext(CartContext);
 
+  const handleRemoveFromCart = (productId: string) => {
+    removeFromCart(productId);
+  };
+
   if (!cart.length) {
     return (
       <>
+        <WhatsApp/>
         <div className="flex items-center justify-center pt-14">
         <img src={emptyCartImage} alt="empty cart" className="flex h-[10rem]"/>
         </div>
@@ -28,16 +36,14 @@ const Cart = () => {
     );
   }
 
-  const handleRemoveFromCart = (productId: string) => {
-    removeFromCart(productId);
-  };
-
   const handleUpdateQuantity = (productId: string, quantity: number) => {
     updateQuantity(productId, quantity);
   };
 
   return (
     <>
+      <ToastContainer/>
+      <WhatsApp/>
       <h1 className="text-3xl py-6 border-b text-left ms-20 text-yellow-600">
         Shopping Cart
       </h1>
@@ -89,7 +95,7 @@ const Cart = () => {
 
                 <div
                   className="ps-14 pt-[5px] cursor-pointer h-[2vh] duration-300 hover:text-red-500"
-                  onClick={() => handleRemoveFromCart(product.id)}
+                  onClick={() => {handleRemoveFromCart(product.id)}}
                 >
                   <IoMdClose size={20} />
                 </div>

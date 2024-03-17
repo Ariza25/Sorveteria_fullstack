@@ -16,7 +16,7 @@ const Categories = () => {
       </div>
       <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-3 gap-2 ms-2 px-10 py-10">
         <div className="hover:opacity-80 cursor-pointer w-auto h-auto">
-          <Link to="/camisetas">
+          <Link to="/picoles">
             <img
               src={picoles}
               className="h-[300px] rounded-lg shadow-md shadow-slate-300"
@@ -25,7 +25,7 @@ const Categories = () => {
           </Link>
         </div>
         <div className="hover:opacity-80 cursor-pointer w-auto h-auto">
-          <Link to="/regatas">
+          <Link to="/icecakes">
             <img
               src={iceCakes}
               className="h-[300px] rounded-lg shadow-md shadow-slate-300"
@@ -34,7 +34,7 @@ const Categories = () => {
           </Link>
         </div>
         <div className="hover:opacity-80 cursor-pointer w-auto h-auto">
-          <Link to="/blusinhas">
+          <Link to="/massas">
             <img
               src={massas}
               className="h-[300px] rounded-lg shadow-md shadow-slate-300"
@@ -43,7 +43,7 @@ const Categories = () => {
           </Link>
         </div>
         <div className="hover:opacity-80 cursor-pointer w-auto h-auto">
-          <Link to="/gym">
+          <Link to="/complementos">
             <img
               src={complementos}
               className="h-[300px] rounded-lg shadow-md shadow-slate-300"
@@ -52,7 +52,7 @@ const Categories = () => {
           </Link>
         </div>
         <div className="hover:opacity-80 cursor-pointer w-auto h-auto">
-          <Link to="/calças">
+          <Link to="/paletasmexicanas">
             <img
               src={Paletas}
               className="h-[300px] rounded-lg shadow-md shadow-slate-300"
@@ -61,7 +61,7 @@ const Categories = () => {
           </Link>
         </div>
         <div className="hover:opacity-80 cursor-pointer w-auto h-auto">
-          <Link to="/acessorios">
+          <Link to="/bebidas">
             <img
               src={bebidas}
               className="h-[300px] rounded-lg shadow-md shadow-slate-300"

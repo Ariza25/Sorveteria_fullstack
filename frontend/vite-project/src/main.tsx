@@ -6,6 +6,8 @@ import AuthProvider from "./context/AuthContext.tsx";
 import {ProductProvider} from "./context/ProductContext.tsx";
 import {CartProvider} from "./context/CartContext.tsx";
 import {UserDataProvider} from "./context/DataUserContext.tsx";
+import { OrderProvider } from "./context/OrderContext.tsx";
+import 'react-toastify/dist/ReactToastify.css';
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -13,7 +15,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <ProductProvider>
         <CartProvider>
           <UserDataProvider>
+            <OrderProvider>
             <App />
+            </OrderProvider>
           </UserDataProvider>
         </CartProvider>
       </ProductProvider>

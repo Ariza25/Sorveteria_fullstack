@@ -1,35 +1,34 @@
-import { FormEvent, useState, useContext } from "react";
+import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext"
+import { AuthContext } from "../context/AuthContext";
+import { useForm } from "react-hook-form";
+import validator from "validator";
 
-import loginImage from "../images/logonobackground.png"
+interface FormData {
+  email: string;
+  password: string;
+}
 
- const Login = () => {
-  const [errors, setErrors] = useState({
-    email: "",
-    password: "",
-  });
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+import loginImage from "../images/logonobackground.png";
+
+const Login = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>();
 
   const navigate = useNavigate();
   const { signIn } = useContext(AuthContext);
 
-  async function handleSubmitLogin(e: FormEvent) {
-    e.preventDefault();
-    await signIn(email, password);
-    navigate("/");
-  }
+  const onSubmit = async (data: FormData) => {
+    console.log("onSubmit called");
 
-  const handleInputChange = (field: string, value: string) => {
-    if (value.trim() !== "") {
-      setErrors((prevErrors) => ({ ...prevErrors, [field]: "" }));
-    }
-
-    if (field === "email") {
-      setEmail(value);
-    } else if (field === "password") {
-      setPassword(value);
+    try {
+      await signIn(data.email, data.password);
+      navigate("/");
+    } catch (error) {
+      console.error("Error signing in:", error);
     }
   };
 
@@ -51,44 +50,52 @@ import loginImage from "../images/logonobackground.png"
 
           <form
             className="flex flex-col my-6 pb-6"
-            onSubmit={handleSubmitLogin}
+            onSubmit={handleSubmit(onSubmit)}
           >
-            <label className="font-medium text-yellow-600">Email:</label>
+            <label className="font-medium text-yellow-600 pb-1">Email:</label>
             <input
-              type="text"
-              placeholder="Digite seu email"
-              className={`w-full mb-5 p-2 rounded ${
-                errors.email && !email ? "bg-red-200" : ""
+              className={`w-full p-2.5 rounded-lg border ${
+                errors?.email ? "border-red-500" : ""
               }`}
-              value={email}
-              onChange={(e) => handleInputChange("email", e.target.value)}
+              type="email"
+              placeholder="Digite seu email"
+              {...register("email", {
+                required: true,
+                validate: (value) => validator.isEmail(value),
+              })}
             />
-            {errors.email && !email && (
-              <span className="text-red-500 font-medium mt-[-15px] mb-3">
-                {errors.email}
-              </span>
+            {errors?.email?.type === "required" && (
+              <p className="text-red-600 pt-1">Email is required</p>
+            )}
+            {errors?.email?.type === "validate" && (
+              <p className="text-red-600 pt-1">Email is invalid</p>
             )}
 
-            <label className="font-medium text-yellow-600">Password:</label>
+            <label className="font-medium text-yellow-600 pt-4 pb-1">
+              Password:
+            </label>
             <input
+              className={`w-full p-2.5 rounded-lg border ${
+                errors?.email ? "border-red-500" : ""
+              }`}
               type="password"
               placeholder="Digite sua senha"
-              className={`w-full mb-5 p-2 rounded ${
-                errors.password && !password ? "bg-red-200" : ""
-              }`}
-              value={password}
-              onChange={(e) => handleInputChange("password", e.target.value)}
+              {...register("password", {
+                required: true,
+                minLength: 6,
+              })}
             />
-            {errors.password && !password && (
-              <span className="text-red-500 font-medium mt-[-15px] mb-3">
-                {errors.password}
-              </span>
+            {errors?.password?.type === "required" && (
+              <p className="text-red-600 pt-1">Password is required</p>
+            )}
+              {errors?.password?.type === "minLength" && (
+              <p className="text-red-600 pt-1">Password must have at least 6 characters</p>
             )}
             <button
               type="submit"
-              className="cursor-pointer rounded w-full p-2 bg-red-600 hover:bg-red-500 font-semibold text-white"
+              className="cursor-pointer rounded w-full p-2 mt-4 bg-red-600 hover:bg-red-500 font-semibold text-white"
             >
-            Login
+              Login
             </button>
           </form>
 

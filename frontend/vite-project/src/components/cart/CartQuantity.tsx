@@ -64,7 +64,7 @@ const CartQuantity: React.FC<UpdatedCartQuantityProps> = ({quantity, onUpdateQua
                     type="text"
                     onChange={(e) => setInputQuantity(e.target.value)}
                     onClick={(event) => event.stopPropagation()}
-                    className="py-2.5 w-[70%] rounded-s-lg ps-2"
+                    className="py-2.5 w-[70%] rounded-s-lg ps-2 text-slate-800"
                   />
                   <button
                     onClick={handlePersonalizeQuantity}

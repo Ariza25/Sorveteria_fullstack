@@ -4,7 +4,7 @@ import { DeleteProductService } from "../../services/product/DeleteProductServic
 class DeleteProductController{
     async handle(req: Request, res: Response){
         try{
-            const {id} = req.query;
+            const { id } = req.params;
             const deleteProductService = new DeleteProductService();
             const product = await deleteProductService.execute(id as string)
             return res.status(200).json({ message: "Product deleted successfully", product });

@@ -7,6 +7,7 @@ import {
   } from "react";
   import { Product } from "../context/ProductContext";
   import { AuthContext } from "../context/AuthContext"
+  import { toast } from "react-toastify";
   
   export interface SelectedProduct extends Product {
     selectedQuantity: number;
@@ -23,6 +24,7 @@ import {
     selectProduct: (product: Product) => void;
     cart: SelectedProduct[];
     updateQuantity: (productId: string, quantity: number) => void;
+    clearCart: () => void;
   };
   export const CartContext = createContext({} as CartContextType);
   
@@ -37,6 +39,19 @@ import {
     const [cart, setCart] = useState<SelectedProduct[]>([]);
     const { user } = useContext(AuthContext);
     const [userId, setUserId] = useState<string>("");
+
+    const notifySuccess = () => toast.success("Product added successfully!",{
+      autoClose: 1000
+});
+    const notifyError = () => toast.error("Product already on cart!",{
+      autoClose: 1000
+  });
+
+  const notifyRemove = () => toast.success("Product removed successfully!",{
+    autoClose: 1000
+  });
+
+
   
     useEffect(() => {
       if (user) {
@@ -67,13 +82,14 @@ import {
     const addToCart = (product: SelectedProduct) => {
       setCart(prevCart => {
         const existingProductIndex = prevCart.findIndex(p => p.id === product.id);
-  
+    
         if (existingProductIndex >= 0) {
-          alert('Este produto já foi adicionado ao carrinho.');
+          notifyError();
           return prevCart;
         } else {
           const newCart = [...prevCart, product];
           localStorage.setItem(`cart-${userId}`, JSON.stringify(newCart));
+          notifySuccess();
           return newCart;
         }
       });
@@ -92,10 +108,18 @@ import {
     };
   
     const removeFromCart = (productId: string) => {
-      const newCart = cart.filter((product) => product.id !== productId);
-      setCart(newCart);
-      localStorage.setItem(`cart-${userId}`, JSON.stringify(newCart));
+      setCart((currentCart) => {
+        const newCart = currentCart.filter((product) => product.id !== productId);
+        localStorage.setItem(`cart-${userId}`, JSON.stringify(newCart));
+        notifyRemove();
+        return newCart;
+      });
     };
+
+    const clearCart = () => {
+      setCart([]);
+      localStorage.removeItem(`cart-${userId}`);
+    }
   
     return (
       <CartContext.Provider
@@ -106,6 +130,7 @@ import {
           removeFromCart,
           cart,
           updateQuantity,
+          clearCart
         }}
       >
         {children}

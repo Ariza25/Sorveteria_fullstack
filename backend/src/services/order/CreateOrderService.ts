@@ -8,7 +8,6 @@ interface ProductProps {
   quantityBought: number;
   UnityPrice: string;
   UnitySubTotalPrice: string;
-  FinalPrice: string;
 }
 
 interface OrderProps {
@@ -23,6 +22,10 @@ interface OrderProps {
   cpf?: string;
   status: boolean;
   products: ProductProps[];
+  FinalPrice: string;
+  deliveryStatus: boolean;
+  deliveryStatusDone: boolean;
+  finishOrder: boolean;
 }
 
 class CreateOrderService {
@@ -33,24 +36,30 @@ class CreateOrderService {
       throw new Error("Products must be an array");
     }
 
-    const order = await this.prisma.order.create({
-      data: {
-        ...orderProps,
-        products: {
-          create: orderProps.products.map(product => ({
-            product: {
-              connect: {
-                id: product.productId
-              },
+    const orderData: any = {
+      ...orderProps,
+      FinalPrice: orderProps.FinalPrice,
+      products: {
+        create: orderProps.products.map(product => ({
+          product: {
+            connect: {
+              id: product.productId
             },
-            productName: product.productName,
-            quantityBought: product.quantityBought,
-            UnityPrice: product.UnityPrice,
-            UnitySubTotalPrice: product.UnitySubTotalPrice,
-            FinalPrice: product.FinalPrice
-          }))
-        }
-      },
+          },
+          productName: product.productName,
+          quantityBought: product.quantityBought,
+          UnityPrice: product.UnityPrice,
+          UnitySubTotalPrice: product.UnitySubTotalPrice,
+        }))
+      }
+    };
+
+    if (orderProps.cpf) {
+      orderData.cpf = orderProps.cpf;
+    }
+
+    const order = await this.prisma.order.create({
+      data: orderData,
       include: {
         products: true
       }

@@ -6,11 +6,14 @@ type User = {
   name: string;
   email: string;
   password: string;
+  confirmPassword: string;
 };
+
 
 type AuthContextType = {
   signOut: () => void;
   signIn: (email: string, password: string) => Promise<void>;
+  signUp: (name: string, email: string, password: string, confirmPassword: string) => Promise<void>;
   user: User;
 };
 
@@ -26,6 +29,7 @@ const AuthProvider: FunctionComponent<AuthProviderProps> = ({ children }) => {
     email: "",
     name: "",
     password: "",
+    confirmPassword: "",
   });
 
   useEffect(() => {
@@ -66,6 +70,36 @@ const AuthProvider: FunctionComponent<AuthProviderProps> = ({ children }) => {
     }
   }
 
+  async function signUp(name: string, email: string, password: string, confirmPassword: string) {
+    try {
+      const response = await api.post("/v1/api/register", {
+        name,
+        email,
+        password,
+        confirmPassword
+      });
+
+      if (user.id && user.id !== response.data.user.id) {
+        localStorage.removeItem(`cart-${user.id}`);
+        localStorage.removeItem(`selectedProduct-${user.id}`);
+      }
+
+      localStorage.setItem("userId", response.data.user.id);
+      localStorage.setItem(
+        `token-${response.data.user.id}`,
+        response.data.user.token
+      );
+      localStorage.setItem(
+        `user-${response.data.user.id}`,
+        JSON.stringify(response.data.user)
+      );
+
+      setUser(response.data.user);
+    } catch (error) {
+      console.error("Error during login:", error);
+    }
+  }
+
 
   function signOut() {
     localStorage.removeItem(`token-${user.id}`);
@@ -75,7 +109,7 @@ const AuthProvider: FunctionComponent<AuthProviderProps> = ({ children }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ signOut, user, signIn }}>
+    <AuthContext.Provider value={{ signOut, user, signIn, signUp }}>
       {children}
     </AuthContext.Provider>
   );

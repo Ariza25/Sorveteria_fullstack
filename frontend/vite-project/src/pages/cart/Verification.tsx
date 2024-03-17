@@ -1,13 +1,14 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { CartContext } from "../../context/CartContext";
 import { UserDataContext } from "../../context/DataUserContext";
 import ShoppingResume from "../../components/cart/ShoppingResume";
 import { api } from "../../services/axios";
-
+import WhatsApp from "../../components/WhatsApp";
 
 const Verification = () => {
   const { userData } = useContext(UserDataContext);
-  const { cart } = useContext(CartContext);
+  const { cart, clearCart } = useContext(CartContext);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleFinishOrder = async () => {
     try {
@@ -29,13 +30,17 @@ const Verification = () => {
           quantityBought: product.selectedQuantity,
           UnityPrice: product.price,
           UnitySubTotalPrice: (parseFloat(product.price) * product.selectedQuantity).toFixed(2),
-          FinalPrice: (parseFloat(product.price) * product.selectedQuantity).toFixed(2),
         })),
+        FinalPrice: cart.reduce((total, product) => total + parseFloat(product.price) * product.selectedQuantity, 0).toFixed(2),
       };
   
-      // Send the order data to the API
       const response = await api.post('/v1/api/order', orderData);
       console.log(response.data);
+
+      clearCart();
+
+      setIsModalOpen(true);
+
     } catch (error) {
       console.error(error);
     }
@@ -43,6 +48,7 @@ const Verification = () => {
 
   return (
     <>
+      <WhatsApp/>
       <div className="flex px-20">
         <main className="w-[50%] items-left">
           <div className="text-3xl py-6 border-b text-left text-yellow-600">
@@ -125,7 +131,7 @@ const Verification = () => {
           </div>
         </main>
         <div className="w-[40%] mb-10">
-          <ShoppingResume handleFinishOrder={handleFinishOrder} />
+        <ShoppingResume handleFinishOrder={handleFinishOrder} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
         </div>
       </div>
     </>

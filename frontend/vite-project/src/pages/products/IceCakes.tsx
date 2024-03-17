@@ -3,6 +3,9 @@ import { ProductContext } from "../../context/ProductContext";
 import { useNavigate } from "react-router-dom";
 import { Product } from "../../context/ProductContext";
 import truncateString from "../../utils/TextReduce";
+import WhatsApp from "../../components/WhatsApp";
+import PageBackToTop from "../../components/PageBackToTop";
+
 
 const IceCakes = () => {
   const { loadProducts, products, selectProduct } = useContext(ProductContext);
@@ -25,6 +28,8 @@ const IceCakes = () => {
 
   return (
     <>
+      <PageBackToTop/>
+      <WhatsApp/>
       <main className="h-auto-screen shadow-slate-400 ms-14 my-10">
         <section className="grid grid-cols-4 gap-36 w-[60%]">
           {filteredProducts.map((product) => {

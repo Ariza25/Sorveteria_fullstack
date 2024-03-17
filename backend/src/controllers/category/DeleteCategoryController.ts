@@ -4,7 +4,7 @@ import {DeleteCategoryService} from '../../services/category/DeleteCategoryServi
 class DeleteCategoryController{
     async handle(req: Request, res: Response){
         try{
-            const {id} = req.query;
+            const {id} = req.params;
 
             const deleteCategoryService = new DeleteCategoryService();
             const category = await deleteCategoryService.execute(id as string);

@@ -9,7 +9,6 @@ class ListProductsService {
         include: {
           category: true,
           size: true,
-          rating: true
         }
       }
     );

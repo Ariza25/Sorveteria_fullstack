@@ -6,7 +6,7 @@ interface ProductProps{
     description: string;
     categoryId: string;
     quantity: number;
-    sizeId: string;
+    sizeId?: string;
     stock: boolean;
     images: string[]
 }

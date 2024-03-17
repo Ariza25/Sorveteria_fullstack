@@ -4,7 +4,7 @@ import { DeleteSizeService } from '../../services/size/DeleteSizeService';
 class DeleteSizeController{
     async handle(req: Request, res: Response){
         try{
-            const { id } = req.query;
+            const { id } = req.params;
             const deleteSizeService = new DeleteSizeService();
 
             await deleteSizeService.execute(id as string);

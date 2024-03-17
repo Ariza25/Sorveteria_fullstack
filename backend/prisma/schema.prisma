@@ -15,7 +15,6 @@ model User {
   confirmPassword String
   created_at      DateTime?          @default(now())
   updated_at      DateTime?          @default(now())
-  rating          RatingOnProduct[]
 
   @@map("users")
 }
@@ -35,6 +34,10 @@ model Order {
   updated_at      DateTime? @default(now())
   products        OrderProduct[]
   status          Boolean
+  deliveryStatus  Boolean?
+  deliveryStatusDone  Boolean?
+  finishOrder     Boolean?
+  FinalPrice      String
 
   @@map("orders")
 }
@@ -52,7 +55,6 @@ model Product {
   categoryId  String             @db.ObjectId
   sizeId      String             @db.ObjectId
   size        Size               @relation(fields: [sizeId], references: [id])
-  rating      RatingOnProduct[]
   orders      OrderProduct[]
 
   @@map("products")
@@ -64,7 +66,6 @@ model OrderProduct {
   quantityBought  Int
   UnityPrice      String
   UnitySubTotalPrice      String
-  FinalPrice      String
   order           Order     @relation(fields: [orderId], references: [id])
   orderId         String    @db.ObjectId
   product         Product   @relation(fields: [productId], references: [id])
@@ -72,8 +73,6 @@ model OrderProduct {
 
   @@map("orderProducts")
 }
-
-
 
 model Category {
   id         String    @id @default(auto()) @map("_id") @db.ObjectId
@@ -85,26 +84,19 @@ model Category {
   @@map("categories")
 }
 
-model Rating {
-  id        String            @id @default(auto()) @map("_id") @db.ObjectId
-  starValue Int
-  ratings   RatingOnProduct[]
-}
-
-model RatingOnProduct {
-  id        String  @id @default(auto()) @map("_id") @db.ObjectId
-  productId String  @db.ObjectId
-  userId    String  @db.ObjectId
-  rating    Rating  @relation(fields: [ratingId], references: [id])
-  ratingId  String  @db.ObjectId
-  user      User    @relation(fields: [userId], references: [id])
-  product   Product @relation(fields: [productId], references: [id])
-
-  @@map("ratingsOnProducts")
-}
-
 model Size {
   id       String    @id @default(auto()) @map("_id") @db.ObjectId
   name     String
   products Product[]
+}
+
+model Contact {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  email     String
+  message   String
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+
+  @@map("contacts")
 }
